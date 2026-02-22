@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(page_title="Gestão Clínica - Luma Silva", layout="centered")
+st.set_page_config(page_title="Gestão Clínica", layout="centered")
 
 st.markdown("""
     <style>
@@ -24,16 +24,24 @@ st.markdown("""
         line-height: 1.6;
         border: 1px dashed #CF9999;
     }
-    .recordatorio-header { color: #7D9147; font-weight: bold; margin-top: 10px; }
+    /* NOVA CLASSE: Recordatório com fonte escura e fundo leve */
+    .recordatorio-text { 
+        color: #1A1A1A !important; /* Quase preto para máximo contraste */
+        background-color: #F0F2F6; 
+        padding: 15px; 
+        border-radius: 8px;
+        border-left: 5px solid #CF9999;
+        font-size: 15px;
+        line-height: 1.5;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-st.markdown("<h1 style='text-align: center; color: #CF9999;'>👩‍⚕️ Painel de Consultas - Luma Silva</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #CF9999;'>👩‍⚕️ Painel de Consultas </h1>", unsafe_allow_html=True)
 
 URL_PLANILHA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQVfY6D-nPMeN8GASlk5aH6Q2yclQWH8vYrEgwguYXk50vVnyqkki4Pf3hkY687S1kL7pMtOW-Fq-VM/pub?gid=0&single=true&output=csv"
 
 try:
-    
     df = pd.read_csv(URL_PLANILHA)
     df.fillna("Não informado", inplace=True)
     
@@ -61,10 +69,9 @@ try:
                 </div>
             """, unsafe_allow_html=True)
             
-            # Recordatório 24h dentro de um Expander 
             with st.expander("🍎 Ver Recordatório 24h Bruto"):
-                if 'Recordatório' in row and row['Recordatório'] != 'Não preenchido':
-                    st.markdown(f"""<div class="recordatorio-text">{row['Recordatório']}</div>""", unsafe_allow_html=True)
+                if 'Recordatório' in row and row['Recordatório'] not in ["Não informado", "Não preenchido"]:
+                    st.markdown(f'<div class="recordatorio-text">{row["Recordatório"]}</div>', unsafe_allow_html=True)
                 else:
                     st.info("O campo de Recordatório será preenchido nos próximos envios do Tally.")
 
